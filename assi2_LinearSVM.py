@@ -15,7 +15,7 @@ y_train_noisy = data["y_train_noisy"]
 y_train_clean = data["y_train_clean"]
 y_test = data["y_test"]
 
-C_values = np.logspace(-2, 2, 10)
+C_values = np.logspace(-2, 2, 10, base=2)
 skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=123)
 
 cv_results = []
