@@ -70,4 +70,4 @@ def prepare_data(data_path="data", c0=5, c1=7, per_class=None, p_flip=0.2, seed=
 
 
 if __name__ == "__main__":
-    prepare_data(p_flip=0.2, seed=123)
+    prepare_data()
