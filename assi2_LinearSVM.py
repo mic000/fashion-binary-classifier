@@ -29,8 +29,8 @@ for val in C_values:
                        "mean_validation_accuracy": float(scores["test_score"].mean()),
                        "mean_train_error": float(1 - scores["train_score"].mean()),
                        "mean_validation_error": float(1 - scores["test_score"].mean()),
-                       "validation_error_std": float(scores["test_score"].std())
-                       })
+                       "validation_error_std": float(scores["test_score"].std())})
+
 cv_results = pd.DataFrame(cv_results)
 
 best_index = cv_results["mean_validation_error"].idxmin()
@@ -106,5 +106,6 @@ best_train_accuracy = best_model.score(X_train, y_train_noisy)
 best_test_accuracy = best_model.score(X_test, y_test)
 print(f"Selected C: {best_C},"
       f"the noisy training accuracy is {best_train_accuracy:.4f}, "
-      f"and the clean test accuracy: {best_test_accuracy:.4f}"
-      )
+      f"and the clean test accuracy: {best_test_accuracy:.4f}")
+
+# best_linear_C = best_C
