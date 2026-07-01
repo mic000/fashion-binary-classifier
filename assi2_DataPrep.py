@@ -21,27 +21,18 @@ def prepare_data(data_path="data", c0=5, c1=7, per_class=None, p_flip=0.2, seed=
     X_test, y_test = binary_classification(X_test, y_test, c0=c0, c1=c1)
     print("Train shape:", X_train.shape)
 
-    # # Optional: select the same number of samples from each class
-    # if per_class is not None:
-    #     selected_indices = []
-    #     for class_label in (0, 1):
-    #         class_indices = np.where(y_train == class_label)[0]
-    #
-    #         if per_class > len(class_indices):
-    #             raise ValueError(
-    #                 f"Class {class_label} only has "
-    #                 f"{len(class_indices)} samples, "
-    #                 f"but per_class={per_class} was requested."
-    #             )
-    #
-    #         sampled_indices = rng.choice(class_indices, size=per_class, replace=False)
-    #         selected_indices.append(sampled_indices)
-    #
-    #     selected_indices = np.concatenate(selected_indices)
-    #     rng.shuffle(selected_indices)
-    #
-    #     X_train = X_train[selected_indices]
-    #     y_train = y_train[selected_indices]
+    if per_class is not None:
+        selected = []
+        for class_label in (0, 1):
+            class_indices = np.where(y_train == class_label)[0]
+            sampled = rng.choice(class_indices, size=per_class, replace=False)
+            selected.append(sampled)
+
+        selected = np.concatenate(selected)
+        rng.shuffle(selected)
+
+        X_train = X_train[selected]
+        y_train = y_train[selected]
 
     # Rescaling with dividing
     X_train = X_train / 255
@@ -54,13 +45,12 @@ def prepare_data(data_path="data", c0=5, c1=7, per_class=None, p_flip=0.2, seed=
     X_test_unit = X_test / np.maximum(test_norms, 1e-12)
 
     y_train_clean = y_train.copy()
-    y_train_noisy = y_train.copy()
     flip_mask = rng.random(len(y_train_clean)) < p_flip
     print(f"Label noise probability is {p_flip}, "
           f"the total number of flip is {flip_mask.sum()},"
           f"and approximately rate of actual flip is {flip_mask.mean():.4f}")
 
-    y_train_noisy = np.where(flip_mask, 1 - y_train_noisy, y_train_noisy)
+    y_train_noisy = np.where(flip_mask, 1 - y_train, y_train)
     print(f"The noisy of train class: {np.bincount(y_train_noisy)}")
 
     return {"X_train": X_train, "X_test": X_test,
