@@ -11,7 +11,6 @@ data = prepare_data(per_class=3000)
 X_train, y_train_noisy, y_train_clean = data["X_train"],  data["y_train_noisy"], data["y_train_clean"]
 X_test, y_test = data["X_test"],  data["y_test"]
 
-
 skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=123)
 C_grid = np.logspace(-2, 2, 10, base=10)
 print("The regularization parameter C is: \n", np.round(C_grid, 3))
@@ -75,3 +74,5 @@ lin_test_error = 1 - best_test_accuracy
 print(f"Selected C: {best_C}, the noisy training accuracy is {best_train_accuracy:.4f}, "
       f"and the clean test accuracy: {best_test_accuracy:.4f} and the error is {lin_test_error:.4f}")
 
+with open("model_results.txt", "a") as f:
+    f.write(f"{lin_test_error}\n")
